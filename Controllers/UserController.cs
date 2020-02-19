@@ -11,8 +11,8 @@ using web_test_api.Model;
 namespace web_test_api.Controllers
 {
     [ApiController]
-    [Route("info")]
-    public class ContactController : ControllerBase
+    [Route("[controller]")]
+    public class UserController : ControllerBase
     {
         private static List<User> Users = new List<User>(){
             new User{Id=1, Name="hello", Username="hello@hello.com"},
@@ -23,14 +23,12 @@ namespace web_test_api.Controllers
         };
 
         private readonly ILogger<ContactController> _logger;
-        private readonly HttpClient _client;
-        private readonly IDependency _dep;
+        private HttpClient _client;
 
-        public ContactController(ILogger<ContactController> logger, HttpClient client, IDependency dep)
+        public UserController(ILogger<ContactController> logger, HttpClient client)
         {
             _logger = logger;
             _client = client;
-            _dep  = dep;
         }
 
         [HttpGet]
@@ -38,9 +36,8 @@ namespace web_test_api.Controllers
         {
 
             var result = await _client.GetStringAsync("/users");
-            var posts = await _client.GetStringAsync("/posts");
-            await _dep.getUser();
-            await _dep.getPost();
+
+            Console.WriteLine(result);
 
             return Ok(new { status = "succes", message = "success get data", data = Users });
         }

@@ -1,3 +1,4 @@
+using System.Net.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +32,16 @@ namespace web_test_api
             services
                 .AddControllers()
                 .AddNewtonsoftJson();
+
+            Uri endpoint = new Uri("https://jsonplaceholder.typicode.com/");
+
+            var httpClient = new HttpClient()
+            {
+                BaseAddress = endpoint,
+            };
+
+            services.AddSingleton<HttpClient>(httpClient);
+            services.AddSingleton<IDependency, Dependency>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -52,7 +63,7 @@ namespace web_test_api
             {
                 endpoints.MapControllers();
             });
-            
+
         }
     }
 }
